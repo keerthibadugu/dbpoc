@@ -1,0 +1,25 @@
+version: '3'
+services:
+  activeMQ:
+    image: rmohr/activemq
+    restart: always
+    ports:
+      - 61616:61616
+      - 8161:8161
+
+  oracleDB:
+    image: store/oracle/database-enterprise:12.2.0.1
+    restart: always
+    ports:
+      - 1521:1521
+
+  app:
+    build:
+      context: ./.ci/app/
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - oracle-db
+      - active-mq
+
